@@ -1,0 +1,36 @@
+name: build-exe
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+    - name: 코드 가져오기
+      uses: actions/checkout@v3
+
+    - name: Python 설치
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 라이브러리 설치
+      run: |
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: exe 빌드
+      run: |
+        pyinstaller --onefile --noconsole main.py
+
+    - name: exe 업로드
+      uses: actions/upload-artifact@v4
+      with:
+        name: ppt-image-program
+        path: dist/main.exe
